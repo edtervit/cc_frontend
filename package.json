@@ -6,6 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "camelcase-keys": "^8.0.1",
     "next": "latest",
     "react": "18.1.0",
     "react-dom": "18.1.0"
