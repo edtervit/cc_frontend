@@ -1,38 +1,25 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type {GetServerSideProps, NextPage} from "next";
 import Head from "next/head";
-import { useState } from "react";
-import { fetchMessages } from "../helper/api";
+import ObliqueCard from "../components/ObliqueCard";
+import {fetchMessages} from "../helper/api";
 import {shuffleArray} from "../helper/utils";
 
-function Home({ messages }: { messages: any }) {
-  const [messageCounter, setMessageCounter] = useState(0);
-
-  const newMessageHandler = () => {
-    if (messageCounter + 1 == messages.length) {
-      setMessageCounter(0);
-    } else {
-      setMessageCounter(messageCounter + 1);
-    }
-  };
+function Home({generalMessages}: {generalMessages: any}) {
 
   return (
     <div
-      className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border cursor-pointer"
-      onClick={() => newMessageHandler()}
+      className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border"
     >
       <Head>
         <title>Creativity Cards</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <h1 className="text-xl">Creativity Cards</h1>
+        <h1 className="text-2xl mb-8">Creativity Cards</h1>
       </div>
-      <main className="w-full items-center h-full  text-center mt-auto">
-        <h2 className="text-6xl bebe">{messages[messageCounter].message}</h2>
-        <p className="mt-4">
-          {messageCounter + 1} of {messages.length}
-        </p>
-      </main>
+      <div className="w-64 h-96 flex items-stretch flex-col ">
+        {generalMessages && <ObliqueCard generalMessages={generalMessages} />}
+      </div>
       <footer className="flex w-full justify-center border-t items-end self-end mt-auto p-2">
         <a
           className="flex items-center justify-center"
@@ -48,14 +35,14 @@ function Home({ messages }: { messages: any }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let messages = await fetchMessages({
+  let generalMessages = await fetchMessages({
     type: 'general'
   });
   //shuffle so they're in a random order and not alphabetical desc
-  messages = shuffleArray(messages);
+  generalMessages = shuffleArray(generalMessages);
 
   return {
-    props: { messages },
+    props: {generalMessages},
   };
 };
 
