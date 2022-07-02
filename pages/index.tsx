@@ -2,6 +2,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import { fetchMessages } from "../helper/api";
+import {shuffleArray} from "../helper/utils";
 
 function Home({ messages }: { messages: any }) {
   const [messageCounter, setMessageCounter] = useState(0);
@@ -47,7 +48,11 @@ function Home({ messages }: { messages: any }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const messages = await fetchMessages();
+  let messages = await fetchMessages({
+    type: 'general'
+  });
+  //shuffle so they're in a random order and not alphabetical desc
+  messages = shuffleArray(messages);
 
   return {
     props: { messages },
