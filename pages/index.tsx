@@ -48,11 +48,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   //shuffle so they're in a random order and not alphabetical desc
   generalMessages = shuffleArray(generalMessages);
 
+  //check url params for value, if found make it the first in array
+  // const { message } = context.query;
+  // if(message)
+  console.log(context.query)
+  if(context.query.message && typeof context.query.message === 'string') generalMessages.unshift({message: decodeURIComponent(context.query.message), fromUrl: true})
+  
   //colour-schemes
   const colourSchemes = await fetchColourSchemes({
     limit: 100,
     random_order: 1,
-  });
+  }); 
 
   return {
     props: {generalMessages, colourSchemes},
