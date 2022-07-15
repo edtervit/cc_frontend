@@ -1,16 +1,19 @@
-import type {GetServerSideProps, NextPage} from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import ColoursCard from "../components/ColoursCard";
 import ObliqueCard from "../components/ObliqueCard";
-import {fetchColourSchemes, fetchMessages} from "../helper/api";
-import {shuffleArray} from "../helper/utils";
+import { fetchColourSchemes, fetchMessages } from "../helper/api";
+import { shuffleArray } from "../helper/utils";
 
-function Home({generalMessages, colourSchemes}: {generalMessages: any, colourSchemes: any}) {
-
+function Home({
+  generalMessages,
+  colourSchemes,
+}: {
+  generalMessages: any;
+  colourSchemes: any;
+}) {
   return (
-    <div
-      className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border"
-    >
+    <div className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border">
       <Head>
         <title>Creativity Cards</title>
         <link rel="icon" href="/favicon.ico" />
@@ -43,10 +46,19 @@ function Home({generalMessages, colourSchemes}: {generalMessages: any, colourSch
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //messages
   let generalMessages = await fetchMessages({
-    type: 'general'
+    type: "general",
   });
   //shuffle so they're in a random order and not alphabetical desc
   generalMessages = shuffleArray(generalMessages);
+
+  //logic to read message from url param
+  if (context?.query?.message && typeof context.query.message === "string") {
+    //improve in future to check db if exists so you can push a random string
+    generalMessages.unshift({
+      message: decodeURIComponent(context.query.message),
+      fromUrl: true,
+    });
+  }
 
   //colour-schemes
   const colourSchemes = await fetchColourSchemes({
@@ -54,8 +66,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     random_order: 1,
   });
 
+  //logic to read colour scheme from url param
+  if (context?.query?.scheme && typeof context.query.scheme === "string") {
+    //improve in future to check db if exists so you can push a random string
+    const schemeArr: string[] = context.query.scheme.split("-");
+    const schemeObj: any = {
+      fromUrl: true,
+    };
+
+    schemeArr.forEach((colour, index) => {
+      schemeObj[`colour${index + 1}`] = colour;
+    });
+
+    colourSchemes.unshift(schemeObj);
+  }
+
   return {
-    props: {generalMessages, colourSchemes},
+    props: { generalMessages, colourSchemes },
   };
 };
 
