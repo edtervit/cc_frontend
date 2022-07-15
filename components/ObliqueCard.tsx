@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ShuffleButton from "./ShuffleButton";
 
-function ObliqueCard({generalMessages}: {generalMessages: any}) {
+function ObliqueCard({ generalMessages }: { generalMessages: any }) {
   const [messageCounter, setMessageCounter] = useState(0);
-  const [message, setMessage] = useState(generalMessages[messageCounter].message);
+  const [message, setMessage] = useState(
+    generalMessages[messageCounter].message
+  );
 
   const newMessageHandler = () => {
     if (messageCounter + 1 == generalMessages.length) {
@@ -12,12 +14,19 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
       setMessageCounter(messageCounter + 1);
     }
   };
-  
+
   useEffect(() => {
-    setMessage(generalMessages[messageCounter].message)
-    //set the param in the url here each time state is updated
-  }, [messageCounter])
-  
+    setMessage(generalMessages[messageCounter].message);
+    if (window.history.pushState) {
+      const url: any = new URL(window.location.toString());
+      url.searchParams.set(
+        "message",
+        encodeURI(generalMessages[messageCounter].message)
+      );
+      window.history.pushState({}, "", url);
+    }
+  }, [messageCounter]);
+
   return (
     <>
       <h2 className="text-lg text-center mb-4">Oblique Strategies</h2>
@@ -31,7 +40,7 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
         </p>
       </div>
     </>
-  )
+  );
 }
 
-export default ObliqueCard
+export default ObliqueCard;
