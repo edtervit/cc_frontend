@@ -49,8 +49,9 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
           positions={['right', 'top']}
           onClickOutside={() => setIsPopoverOpen(false)}
           content={
-            <div className="bg-white rounded-lg px-3 py-1 text-sm transition-all">
-              <a className="cursor-pointer underline" href="https://en.wikipedia.org/wiki/Oblique_Strategies" target='_blank'>Click here to learn more about oblique strategies.</a>
+            <div className="bg-white rounded-lg p-4 text-sm border border-black shadow-lg">
+              <div className="w-52 text-sm">Method for promoting creativity by encouraging lateral thinking jointly created by musician/artist Brian Eno and multimedia artist Peter Schmidt.</div>
+              <a className="cursor-pointer underline" href="https://en.wikipedia.org/wiki/Oblique_Strategies" target='_blank'>Learn more</a>
             </div>
           }
         >
