@@ -19,7 +19,10 @@ function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <h1 className="text-2xl mb-8">Creativity Cards</h1>
+        <h1 className="text-2xl text-center">Creativity Cards</h1>
+        <h2 className="mb-8 text-center">
+          Spark inspiration, break the creative block.
+        </h2>
       </div>
       <div className="flex sm:space-x-4 flex-wrap justify-center space-y-4 sm:space-y-0 flex-col sm:flex-row pb-8 sm:pb-0">
         <div className="w-64 h-96 flex items-stretch flex-col">
