@@ -1,9 +1,9 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type {GetServerSideProps, NextPage} from "next";
 import Head from "next/head";
 import ColoursCard from "../components/ColoursCard";
 import ObliqueCard from "../components/ObliqueCard";
-import { fetchColourSchemes, fetchMessages } from "../helper/api";
-import { shuffleArray } from "../helper/utils";
+import {fetchColourSchemes, fetchMessages} from "../helper/api";
+import {shuffleArray} from "../helper/utils";
 
 function Home({
   generalMessages,
@@ -31,6 +31,10 @@ function Home({
         <div className="w-64 h-96 flex items-stretch flex-col">
           {colourSchemes && <ColoursCard colourSchemes={colourSchemes} />}
         </div>
+      </div>
+      <div className="text-center p-4 md:mt-8 text-sm">
+        <p>Send these specific cards to someone!</p>
+        <p>Simply send them the link of this page.</p>
       </div>
       <footer className="flex w-full justify-center border-t items-end self-end mt-auto p-2">
         <a
@@ -85,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { generalMessages, colourSchemes },
+    props: {generalMessages, colourSchemes},
   };
 };
 
