@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { copyTextToClipboard } from "../helper/utils";
+import React, {useEffect, useState} from "react";
+import {copyTextToClipboard} from "../helper/utils";
+import RewindButton from "./RewindButton";
 import ShuffleButton from "./ShuffleButton";
 
-function ColoursCard({ colourSchemes }: { colourSchemes: any }) {
+function ColoursCard({colourSchemes}: {colourSchemes: any}) {
   const [schemeCounter, setSchemeCounter] = useState(0);
   const [colours, setColours] = useState<null | string[]>(null);
   const [showCopiedMessage, setShowCopiedMessage] = useState(-1);
@@ -20,6 +21,14 @@ function ColoursCard({ colourSchemes }: { colourSchemes: any }) {
       setSchemeCounter(0);
     } else {
       setSchemeCounter(schemeCounter + 1);
+    }
+  };
+  
+  const rewindHandler = () => {
+    if (schemeCounter === 0) {
+      setSchemeCounter(colourSchemes.length - 1);
+    } else {
+      setSchemeCounter(schemeCounter - 1);
     }
   };
 
@@ -48,7 +57,7 @@ function ColoursCard({ colourSchemes }: { colourSchemes: any }) {
               return (
                 <div
                   className="w-full flex-1 cursor-pointer overflow-hidden"
-                  style={{ backgroundColor: "#" + colour }}
+                  style={{backgroundColor: "#" + colour}}
                   key={index}
                   onClick={() => copyTextHandler(colour, index)}
                 >
@@ -62,12 +71,14 @@ function ColoursCard({ colourSchemes }: { colourSchemes: any }) {
               );
             })}
         </div>
-        <div className="mt-auto" onClick={() => newSchemeHandler()}>
-          <ShuffleButton />
+        <div className="mt-auto flex items-center space-x-2">
+          <div onClick={() => rewindHandler()}>
+            <RewindButton />
+          </div>
+          <div onClick={() => newSchemeHandler()}>
+            <ShuffleButton />
+          </div>
         </div>
-        <p className="justify-self-end text-xs mt-2">
-          {schemeCounter + 1} of {colourSchemes.length}
-        </p>
       </div>
     </>
   );

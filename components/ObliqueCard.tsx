@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ShuffleButton from "./ShuffleButton";
 import {Popover} from 'react-tiny-popover'
+import RewindButton from "./RewindButton";
 
 
 function ObliqueCard({generalMessages}: {generalMessages: any}) {
@@ -15,6 +16,14 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
       setMessageCounter(0);
     } else {
       setMessageCounter(messageCounter + 1);
+    }
+  };
+  
+  const rewindHandler = () => {
+    if (messageCounter === 0) {
+      setMessageCounter(generalMessages.length - 1);
+    } else {
+      setMessageCounter(messageCounter - 1);
     }
   };
 
@@ -51,12 +60,14 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
 
       <div className="flex flex-col flex-1 w-full items-center justify-center text-center bg-white text-black rounded-3xl min-h-max p-5 shadow-gray-400 shadow-lg ">
         <p className="bebe text-2xl mt-auto">{message}</p>
-        <div className="mt-auto" onClick={() => newMessageHandler()}>
-          <ShuffleButton />
+        <div className="mt-auto flex items-center space-x-2">
+          <div onClick={() => rewindHandler()}>
+            <RewindButton />
+          </div>
+          <div onClick={() => newMessageHandler()}>
+            <ShuffleButton />
+          </div>
         </div>
-        <p className="justify-self-end text-xs mt-2">
-          {messageCounter + 1} of {generalMessages.length}
-        </p>
       </div>
     </>
   );
