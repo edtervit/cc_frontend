@@ -4,10 +4,10 @@ import {Popover} from 'react-tiny-popover'
 import RewindButton from "./RewindButton";
 
 
-function ObliqueCard({generalMessages}: {generalMessages: any}) {
+function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: any, title: string, dbColName: string}) {
   const [messageCounter, setMessageCounter] = useState(0);
   const [message, setMessage] = useState(
-    generalMessages[messageCounter].message
+    generalMessages[messageCounter][dbColName]
   );
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
@@ -28,12 +28,12 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
   };
 
   useEffect(() => {
-    setMessage(generalMessages[messageCounter].message);
+    setMessage(generalMessages[messageCounter][dbColName]);
     if (window.history.pushState) {
       const url: any = new URL(window.location.toString());
       url.searchParams.set(
-        "message",
-        encodeURI(generalMessages[messageCounter].message)
+        dbColName,
+        encodeURI(generalMessages[messageCounter][dbColName])
       );
       window.history.pushState({}, "", url);
     }
@@ -42,8 +42,8 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
   return (
     <>
       <div className="flex justify-center items-center mb-4">
-        <h2 className="text-lg text-center">Oblique Strategies</h2>
-        <Popover
+        <h2 className="text-lg text-center">{title}</h2>
+        {dbColName === 'message' && <Popover
           isOpen={isPopoverOpen}
           padding={5}
           positions={['right', 'top']}
@@ -56,7 +56,7 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
           }
         >
           <img className="w-4 cursor-pointer ml-1" src="./icons/info.svg" onClick={() => setIsPopoverOpen(!isPopoverOpen)} />
-        </Popover>
+        </Popover>}
       </div>
 
       <div className="flex flex-col flex-1 w-full items-center justify-center text-center bg-white text-black rounded-3xl min-h-max p-5 shadow-gray-400 shadow-lg ">
@@ -74,4 +74,4 @@ function ObliqueCard({generalMessages}: {generalMessages: any}) {
   );
 }
 
-export default ObliqueCard;
+export default SimpleTextCard;

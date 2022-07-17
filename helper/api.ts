@@ -16,3 +16,11 @@ export function fetchColourSchemes(query?: Object, cancelToken?: CancelToken) {
     cancelToken
   ) as unknown as Promise<any>;
 }
+
+export function fetchSubjects(query?: Object, cancelToken?: CancelToken) {
+  return request(
+    `/api/subjects`,
+    query,
+    cancelToken
+  ) as unknown as Promise<any>;
+}
