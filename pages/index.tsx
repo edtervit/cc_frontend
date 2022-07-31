@@ -1,14 +1,18 @@
-import type {GetServerSideProps, NextPage} from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import ColoursCard from "../components/ColoursCard";
 import SimpleTextCard from "../components/SimpleTextCard";
-import {fetchColourSchemes, fetchMessages, fetchSubjects} from "../helper/api";
-import {shuffleArray} from "../helper/utils";
+import {
+  fetchColourSchemes,
+  fetchMessages,
+  fetchSubjects,
+} from "../helper/api";
+import { shuffleArray } from "../helper/utils";
 
 function Home({
   generalMessages,
   colourSchemes,
-  subjectsData
+  subjectsData,
 }: {
   generalMessages: any;
   colourSchemes: any;
@@ -27,19 +31,30 @@ function Home({
         </h2>
       </div>
       <div className="flex sm:space-x-4 flex-wrap justify-center space-y-4 sm:space-y-0 flex-col sm:flex-row pb-8 sm:pb-0">
-      <div className="w-64 h-96 flex items-stretch flex-col">
-          {subjectsData && <SimpleTextCard dbColName="subject" generalMessages={subjectsData} title="Subject"/>}
+        <div className="w-64 h-96 flex items-stretch flex-col">
+          {subjectsData && (
+            <SimpleTextCard
+              dbColName="subject"
+              generalMessages={subjectsData}
+              title="Subject"
+            />
+          )}
         </div>
         <div className="w-64 h-96 flex items-stretch flex-col">
           {colourSchemes && <ColoursCard colourSchemes={colourSchemes} />}
         </div>
         <div className="w-64 h-96 flex items-stretch flex-col">
-          {generalMessages && <SimpleTextCard dbColName="message" generalMessages={generalMessages} title='Oblique Strategies'/>}
+          {generalMessages && (
+            <SimpleTextCard
+              dbColName="message"
+              generalMessages={generalMessages}
+              title="Oblique Strategies"
+            />
+          )}
         </div>
       </div>
       <div className="text-center p-4 md:mt-8 text-sm">
-        <p>Send these specific cards to someone!</p>
-        <p>Simply send them the link of this page.</p>
+        <p>Send these specific cards to someone, just send the url!</p>
       </div>
       <footer className="flex w-full justify-center border-t items-end self-end mt-auto p-2">
         <a
@@ -71,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       fromUrl: true,
     });
   }
-  
+
   //subject
   let subjectsData = await fetchSubjects();
   //shuffle so they're in a random order and not alphabetical desc
@@ -85,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       fromUrl: true,
     });
   }
-  
+
   //colour-schemes
   const colourSchemes = await fetchColourSchemes({
     limit: 100,
@@ -108,7 +123,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: {generalMessages, colourSchemes, subjectsData},
+    props: { generalMessages, colourSchemes, subjectsData },
   };
 };
 
