@@ -43,6 +43,8 @@ function Home({
         <div className="w-64 h-96 flex items-stretch flex-col">
           {colourSchemes && <ColoursCard colourSchemes={colourSchemes} />}
         </div>
+        {/* must use the utm_source and utm_medium url param */}
+        {/* example snippet:  Photo by <a href="https://unsplash.com/@anniespratt?utm_source=your_app_name&utm_medium=referral">Annie Spratt</a> on <a href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral">Unsplash</a>*/}
         <div className="w-64 h-96 flex items-stretch flex-col">
           {generalMessages && (
             <SimpleTextCard
