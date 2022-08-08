@@ -24,3 +24,11 @@ export function fetchSubjects(query?: Object, cancelToken?: CancelToken) {
     cancelToken
   ) as unknown as Promise<any>;
 }
+
+export function fetchImages(query?: Object, cancelToken?: CancelToken) {
+  return request(
+    `/api/images`,
+    query,
+    cancelToken
+  ) as unknown as Promise<any>;
+}

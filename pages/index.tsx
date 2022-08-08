@@ -1,9 +1,11 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import ColoursCard from "../components/ColoursCard";
+import ImageCard from "../components/ImageCard";
 import SimpleTextCard from "../components/SimpleTextCard";
 import {
   fetchColourSchemes,
+  fetchImages,
   fetchMessages,
   fetchSubjects,
 } from "../helper/api";
@@ -13,11 +15,14 @@ function Home({
   generalMessages,
   colourSchemes,
   subjectsData,
+  images,
 }: {
   generalMessages: any;
   colourSchemes: any;
   subjectsData: any;
+  images: any;
 }) {
+  console.log(images)
   return (
     <div className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border">
       <Head>
@@ -30,8 +35,8 @@ function Home({
           Spark inspiration, break the creative block.
         </h2>
       </div>
-      <div className="flex sm:space-x-4 flex-wrap justify-center space-y-4 sm:space-y-0 flex-col sm:flex-row pb-8 sm:pb-0">
-        <div className="w-64 h-96 flex items-stretch flex-col">
+      <div className="flex space-y-4 sm:space-x-4 flex-wrap justify-center flex-col sm:flex-row pb-8 sm:pb-0">
+        <div className="w-64 h-96 flex items-stretch flex-col sm:mt-4">
           {subjectsData && (
             <SimpleTextCard
               dbColName="subject"
@@ -40,14 +45,21 @@ function Home({
             />
           )}
         </div>
-        <div className="w-64 h-96 flex items-stretch flex-col">
+        <div className="w-64 h-96 flex items-stretch flex-col sm:mt-4">
           {colourSchemes && <ColoursCard colourSchemes={colourSchemes} />}
         </div>
-        {/* must use the utm_source and utm_medium url param */}
-        {/* example snippet:  Photo by <a href="https://unsplash.com/@anniespratt?utm_source=your_app_name&utm_medium=referral">Annie Spratt</a> on <a href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral">Unsplash</a>*/}
-        <div className="w-64 h-96 flex items-stretch flex-col">
+        <div className="w-64 h-96 flex items-stretch flex-col sm:mt-4">
           {generalMessages && (
             <SimpleTextCard
+              dbColName="message"
+              generalMessages={generalMessages}
+              title="Oblique Strategies"
+            />
+          )}
+        </div>
+        <div className="w-64 h-96 flex items-stretch flex-col sm:mt-4">
+          {generalMessages && (
+            <ImageCard
               dbColName="message"
               generalMessages={generalMessages}
               title="Oblique Strategies"
@@ -123,9 +135,51 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     colourSchemes.unshift(schemeObj);
   }
+  
+  //images
+  let images = null;
 
+  //logic to read image from url param
+  if (context?.query?.image && typeof context.query.image === "string") {
+    //url format image=1-p for image with Id 1 in which is portrait;
+    
+    const imageParamStringArr: string[] = context.query.image.split("-");
+    
+    const imageId = imageParamStringArr[0];
+    const imageOriRaw = imageParamStringArr[1];
+    
+    let imageOri = 'portrait';
+    
+    switch (imageOriRaw) {
+      case 'p':
+        break;
+      case 's':
+        imageOri = 'squarish'
+        break;
+      case 'l':
+        imageOri = 'landscape'
+        break;
+    
+      default:
+        break;
+    }
+    
+    images = await fetchImages({
+      limit: 100,
+      orientation: imageOri,
+      skipUnsplashApiCall: 0,
+      mustIncludeTheseImages: [imageId],
+    });
+  } else {
+    images = await fetchImages({
+      limit: 100,
+      orientation: 'portrait',
+      skipUnsplashApiCall: 1,
+    });
+  }
+  
   return {
-    props: { generalMessages, colourSchemes, subjectsData },
+    props: { generalMessages, colourSchemes, subjectsData, images },
   };
 };
 
