@@ -4,7 +4,6 @@ import {Popover} from 'react-tiny-popover'
 import RewindButton from "./RewindButton";
 import {CirclePicker} from 'react-color';
 import {colourSwitch, selectedColourObject} from "../helper/image-card";
-// eslint-disable-next-line 
 import Lightbox from "react-awesome-lightbox";
 import "react-awesome-lightbox/build/style.css";
 import LoadingSpinner from "./LoadingSpinner";
