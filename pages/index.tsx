@@ -4,6 +4,7 @@ import ColoursCard from "../components/ColoursCard";
 import ImageCard from "../components/ImageCard";
 import SimpleTextCard from "../components/SimpleTextCard";
 import {
+  fetchAllTopics,
   fetchColourSchemes,
   fetchImages,
   fetchMessages,
@@ -16,13 +17,14 @@ function Home({
   colourSchemes,
   subjectsData,
   images,
+  topics,
 }: {
   generalMessages: any;
   colourSchemes: any;
   subjectsData: any;
   images: any;
+  topics: any;
 }) {
-  console.log(images)
   return (
     <div className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border">
       <Head>
@@ -60,9 +62,8 @@ function Home({
         <div className="w-64 h-96 flex items-stretch flex-col sm:mt-4">
           {generalMessages && (
             <ImageCard
-              dbColName="message"
-              generalMessages={generalMessages}
-              title="Oblique Strategies"
+              defaultImages={images}
+              topics={topics}
             />
           )}
         </div>
@@ -141,33 +142,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   //logic to read image from url param
   if (context?.query?.image && typeof context.query.image === "string") {
-    //url format image=1-p for image with Id 1 in which is portrait;
+    //url format image=1-portrait for image with Id 1 which is portrait;
     
     const imageParamStringArr: string[] = context.query.image.split("-");
     
     const imageId = imageParamStringArr[0];
-    const imageOriRaw = imageParamStringArr[1];
-    
-    let imageOri = 'portrait';
-    
-    switch (imageOriRaw) {
-      case 'p':
-        break;
-      case 's':
-        imageOri = 'squarish'
-        break;
-      case 'l':
-        imageOri = 'landscape'
-        break;
-    
-      default:
-        break;
-    }
+    const imageOri = imageParamStringArr[1];
     
     images = await fetchImages({
       limit: 100,
       orientation: imageOri,
-      skipUnsplashApiCall: 0,
+      skipUnsplashApiCall: 1,
       mustIncludeTheseImages: [imageId],
     });
   } else {
@@ -178,8 +163,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     });
   }
   
+  const topicsRaw = await fetchAllTopics();
+  const topics = topicsRaw.sort((a: any,b: any) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+
   return {
-    props: { generalMessages, colourSchemes, subjectsData, images },
+    props: { generalMessages, colourSchemes, subjectsData, images, topics },
   };
 };
 

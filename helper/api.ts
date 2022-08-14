@@ -1,34 +1,41 @@
 import request from "./requests";
-import { CancelToken } from "axios";
 
-export function fetchMessages(query?: Object, cancelToken?: CancelToken) {
+export function fetchMessages(query?: Object, signal?: AbortSignal) {
   return request(
     `/api/messages`,
     query,
-    cancelToken
+    signal
   ) as unknown as Promise<any>;
 }
 
-export function fetchColourSchemes(query?: Object, cancelToken?: CancelToken) {
+export function fetchColourSchemes(query?: Object, signal?: AbortSignal) {
   return request(
     `/api/colour-schemes`,
     query,
-    cancelToken
+    signal
   ) as unknown as Promise<any>;
 }
 
-export function fetchSubjects(query?: Object, cancelToken?: CancelToken) {
+export function fetchSubjects(query?: Object, signal?: AbortSignal) {
   return request(
     `/api/subjects`,
     query,
-    cancelToken
+    signal
   ) as unknown as Promise<any>;
 }
 
-export function fetchImages(query?: Object, cancelToken?: CancelToken) {
+export function fetchImages(query?: Object, signal?: AbortSignal) {
   return request(
     `/api/images`,
     query,
-    cancelToken
+    signal
+  ) as unknown as Promise<any>;
+}
+
+export function fetchAllTopics(query?: Object, signal?: AbortSignal) {
+  return request(
+    `/api/topics`,
+    query,
+    signal
   ) as unknown as Promise<any>;
 }
