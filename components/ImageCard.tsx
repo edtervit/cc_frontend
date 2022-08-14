@@ -7,7 +7,6 @@ import {colourSwitch, selectedColourObject} from "../helper/image-card";
 import Lightbox from "react-awesome-lightbox";
 import "react-awesome-lightbox/build/style.css";
 import LoadingSpinner from "./LoadingSpinner";
-import axios from "axios";
 import {fetchImages} from "../helper/api";
 
 
@@ -40,7 +39,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
 
   const newImageHandler = () => {
     setLoadingImage(true);
-    if (imageCounter + 1 == defaultImages.length) {
+    if (imageCounter + 1 == images.length) {
       setImageCounter(0);
     } else {
       setImageCounter(imageCounter + 1);
@@ -50,7 +49,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
   const rewindHandler = () => {
     setLoadingImage(true);
     if (imageCounter === 0) {
-      setImageCounter(defaultImages.length - 1);
+      setImageCounter(images.length - 1);
     } else {
       setImageCounter(imageCounter - 1);
     }
@@ -152,7 +151,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
       </div>
       <div className="flex flex-col flex-1 w-full items-center justify-center text-center bg-white text-black rounded-3xl min-h-max p-5 pt-1 shadow-gray-400 shadow-lg ">
         <div className="options-bar border-b border-b-black height-12 w-full mb-auto flex flex-wrap py-1">
-          <div className="w-10/12 relative mr-2">
+          <div className="w-full relative">
             <select className="w-full p-1 placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline text-xs" placeholder="Select your orientation"
               value={selectedOri}
               onChange={(e) => setSelectedOri(e.target.value)}
@@ -166,7 +165,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
             </div>
           </div>
           <div className="relative">
-            {<Popover
+            {/* {<Popover
               isOpen={isColourPopoverOpen}
               padding={5}
               positions={['right', 'top']}
@@ -187,7 +186,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
                 )
                 }
               </div>
-            </Popover>}
+            </Popover>} */}
           </div>
           <div className="w-full relative mt-2">
             <select className="w-full p-1 placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline text-xs"
