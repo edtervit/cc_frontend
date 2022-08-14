@@ -1,4 +1,4 @@
-import axios, { CancelToken, Method } from "axios";
+import axios, { Method } from "axios";
 import camelcaseKeys from "camelcase-keys";
 
 export const baseDomainName: string | undefined =
@@ -17,14 +17,14 @@ service.interceptors.response.use((response) => {
 export default function request(
   url: string,
   query?: object,
-  cancelToken?: CancelToken,
+  signal?: AbortSignal,
   headers?: object,
   requestType?: Method
 ) {
   return service({
     url,
     params: query,
-    cancelToken: cancelToken,
+    signal: signal,
     headers: { ...headers },
     method: requestType ?? "GET",
   });
