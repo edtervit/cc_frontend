@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
+import {ColourScheme} from "../helper/types";
 import {copyTextToClipboard} from "../helper/utils";
 import RewindButton from "./RewindButton";
 import ShuffleButton from "./ShuffleButton";
 
-function ColoursCard({colourSchemes}: {colourSchemes: any}) {
+function ColoursCard({colourSchemes}: {colourSchemes: ColourScheme[]}) {
   const [schemeCounter, setSchemeCounter] = useState(0);
   const [colours, setColours] = useState<null | string[]>(null);
   const [showCopiedMessage, setShowCopiedMessage] = useState(-1);
@@ -23,7 +24,7 @@ function ColoursCard({colourSchemes}: {colourSchemes: any}) {
       setSchemeCounter(schemeCounter + 1);
     }
   };
-  
+
   const rewindHandler = () => {
     if (schemeCounter === 0) {
       setSchemeCounter(colourSchemes.length - 1);
@@ -35,13 +36,16 @@ function ColoursCard({colourSchemes}: {colourSchemes: any}) {
   useEffect(() => {
     const coloursArray: string[] = [];
     for (let index = 0; index < 5; index++) {
-      coloursArray.push(colourSchemes[schemeCounter][`colour${index + 1}`]);
+      const colourSchemeValue = colourSchemes[schemeCounter][`colour${index + 1}` as keyof ColourScheme];
+      if (typeof colourSchemeValue === 'string') {
+        coloursArray.push(colourSchemeValue);
+      }
     }
     setColours(coloursArray);
 
     //update query string
     if (window.history.pushState) {
-      const url: any = new URL(window.location.toString());
+      const url: URL = new URL(window.location.toString());
       url.searchParams.set("scheme", coloursArray.join("-"));
       window.history.pushState({}, "", url);
     }

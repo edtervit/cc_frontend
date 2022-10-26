@@ -1,11 +1,12 @@
 import request from "./requests";
+import {ColourScheme, GeneralMessage, Image, SubjectsData, Topic} from "./types";
 
 export function fetchMessages(query?: Object, signal?: AbortSignal) {
   return request(
     `/api/messages`,
     query,
     signal
-  ) as unknown as Promise<any>;
+  ) as unknown as Promise<GeneralMessage[]>;
 }
 
 export function fetchColourSchemes(query?: Object, signal?: AbortSignal) {
@@ -13,7 +14,7 @@ export function fetchColourSchemes(query?: Object, signal?: AbortSignal) {
     `/api/colour-schemes`,
     query,
     signal
-  ) as unknown as Promise<any>;
+  ) as unknown as Promise<ColourScheme[]>;
 }
 
 export function fetchSubjects(query?: Object, signal?: AbortSignal) {
@@ -21,7 +22,7 @@ export function fetchSubjects(query?: Object, signal?: AbortSignal) {
     `/api/subjects`,
     query,
     signal
-  ) as unknown as Promise<any>;
+  ) as unknown as Promise<SubjectsData[]>;
 }
 
 export function fetchImages(query?: Object, signal?: AbortSignal) {
@@ -29,7 +30,7 @@ export function fetchImages(query?: Object, signal?: AbortSignal) {
     `/api/images`,
     query,
     signal
-  ) as unknown as Promise<any>;
+  ) as unknown as Promise<Image[]>;
 }
 
 export function fetchAllTopics(query?: Object, signal?: AbortSignal) {
@@ -37,5 +38,5 @@ export function fetchAllTopics(query?: Object, signal?: AbortSignal) {
     `/api/topics`,
     query,
     signal
-  ) as unknown as Promise<any>;
+  ) as unknown as Promise<Topic[]>;
 }
