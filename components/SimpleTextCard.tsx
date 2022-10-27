@@ -2,12 +2,15 @@ import React, {useEffect, useState} from "react";
 import ShuffleButton from "./ShuffleButton";
 import {Popover} from 'react-tiny-popover'
 import RewindButton from "./RewindButton";
+import {GeneralMessage, SubjectsData} from "../helper/types";
 
 
-function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: any, title: string, dbColName: string}) {
+function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: GeneralMessage[] | SubjectsData[], title: string, dbColName: string}) {
+  
+  console.log(generalMessages)
   const [messageCounter, setMessageCounter] = useState(0);
   const [message, setMessage] = useState(
-    generalMessages[messageCounter][dbColName]
+    generalMessages[messageCounter][dbColName as keyof GeneralMessage]
   );
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
@@ -18,7 +21,7 @@ function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: a
       setMessageCounter(messageCounter + 1);
     }
   };
-  
+
   const rewindHandler = () => {
     if (messageCounter === 0) {
       setMessageCounter(generalMessages.length - 1);
@@ -28,14 +31,18 @@ function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: a
   };
 
   useEffect(() => {
-    setMessage(generalMessages[messageCounter][dbColName]);
+    setMessage(generalMessages[messageCounter][dbColName as keyof GeneralMessage]);
     if (window.history.pushState) {
-      const url: any = new URL(window.location.toString());
-      url.searchParams.set(
-        dbColName,
-        encodeURI(generalMessages[messageCounter][dbColName])
-      );
-      window.history.pushState({}, "", url);
+      const url: URL = new URL(window.location.toString());
+
+      const messageValue = generalMessages[messageCounter][dbColName as keyof GeneralMessage];
+      if (typeof messageValue === 'string') {
+        url.searchParams.set(
+          dbColName,
+          encodeURI(messageValue)
+        );
+        window.history.pushState({}, "", url);
+      }
     }
   }, [messageCounter]);
 

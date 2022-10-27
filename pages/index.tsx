@@ -10,6 +10,7 @@ import {
   fetchMessages,
   fetchSubjects,
 } from "../helper/api";
+import {ColourScheme, GeneralMessage, Image, SubjectsData, Topic} from "../helper/types";
 import { shuffleArray } from "../helper/utils";
 
 function Home({
@@ -19,11 +20,11 @@ function Home({
   images,
   topics,
 }: {
-  generalMessages: any;
-  colourSchemes: any;
-  subjectsData: any;
-  images: any;
-  topics: any;
+  generalMessages: GeneralMessage[];
+  colourSchemes: ColourScheme[];
+  subjectsData: SubjectsData[];
+  images: Image[];
+  topics: Topic[];
 }) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center pt-4 bg-black text-white box-border">
@@ -87,11 +88,11 @@ function Home({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //messages
-  let generalMessages = await fetchMessages({
+  let generalMessages:GeneralMessage[] = await fetchMessages({
     type: "general",
   });
   //shuffle so they're in a random order and not alphabetical desc
-  generalMessages = shuffleArray(generalMessages);
+  generalMessages = shuffleArray(generalMessages as []);
 
   //logic to read message from url param
   if (context?.query?.message && typeof context.query.message === "string") {
@@ -105,7 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   //subject
   let subjectsData = await fetchSubjects();
   //shuffle so they're in a random order and not alphabetical desc
-  subjectsData = shuffleArray(subjectsData);
+  subjectsData = shuffleArray(subjectsData as []);
 
   //logic to read subject from url param
   if (context?.query?.subject && typeof context.query.subject === "string") {
@@ -124,17 +125,45 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   //logic to read colour scheme from url param
   if (context?.query?.scheme && typeof context.query.scheme === "string") {
-    //improve in future to check db if exists so you can push a random string
+    //improve in future to check db if exists so you can't push a random string
     const schemeArr: string[] = context.query.scheme.split("-");
-    const schemeObj: any = {
+    const schemeObj: ColourScheme = {
       fromUrl: true,
+      colour1: '',
+      colour2: '',
+      colour3: '',
+      colour4: '',
+      colour5: '',
     };
+    
 
-    schemeArr.forEach((colour, index) => {
-      schemeObj[`colour${index + 1}`] = colour;
+    schemeArr.forEach((colour: string, index: number) => {
+      //typescript doesn't like this for some reason, TODO : clean this up to not need switch statement
+      // schemeObj[`colour${index + 1}` as keyof ColourScheme] = colour;
+      
+      switch (index) {
+        case 0:
+          schemeObj.colour1 = colour;
+          break;
+        case 1:
+          schemeObj.colour2 = colour;
+          break;
+        case 2:
+          schemeObj.colour3 = colour;
+          break;
+        case 3:
+          schemeObj.colour4 = colour;
+          break;
+        case 4:
+          schemeObj.colour5 = colour;
+          break;
+      
+        default:
+          break;
+      }
     });
-
     colourSchemes.unshift(schemeObj);
+    
   }
   
   //images
@@ -164,7 +193,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   
   const topicsRaw = await fetchAllTopics();
-  const topics = topicsRaw.sort((a: any,b: any) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+  const topics = topicsRaw.sort((a: Topic,b: Topic) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
 
   return {
     props: { generalMessages, colourSchemes, subjectsData, images, topics },

@@ -8,13 +8,15 @@ import Lightbox from "react-awesome-lightbox";
 import "react-awesome-lightbox/build/style.css";
 import LoadingSpinner from "./LoadingSpinner";
 import {fetchImages} from "../helper/api";
+import {Image, ImageRequestPayload, Topic} from "../helper/types";
 
 
 
-function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any}) {
+function ImageCard({defaultImages, topics}: {defaultImages: Image[], topics: Topic[]}) {
+
   const [imageCounter, setImageCounter] = useState(0);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const [isColourPopoverOpen, setIsColourPopoverOpen] = useState(false)
+  // const [isColourPopoverOpen, setIsColourPopoverOpen] = useState(false)
   const [showLightbox, setShowLightbox] = useState(false)
 
   const [selectedColour, setSelectedColour] = useState<undefined | selectedColourObject>(undefined);
@@ -32,7 +34,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
     'gray', 'black', 'white', 'yellow', 'orange', 'red', 'purple', 'magenta', 'green', 'teal', 'blue'
   ];
 
-  const colourChangeHandler = (colour: any) => {
+  const colourChangeHandler = (colour: string) => {
     const colourObject = colourSwitch(colour);
     colourObject && setSelectedColour(colourObject);
   }
@@ -73,11 +75,11 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
         break;
     }
 
-    let payload: any = {
+    let payload: ImageRequestPayload = {
       skipUnsplashApiCall: 0,
       orientation: selectedOri.toLocaleLowerCase()
     };
-
+    
     if (selectedColour) {
       payload.colour = selectedColour.slug;
     }
@@ -123,7 +125,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
   useEffect(() => {
     //update query string
     if (window.history.pushState && images.length > 0) {
-      const url: any = new URL(window.location.toString());
+      const url: URL = new URL(window.location.toString());
       url.searchParams.set("image", images[imageCounter].id + '-' + images[imageCounter].orientation);
       window.history.pushState({}, "", url);
     }
@@ -194,7 +196,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: any[], topics: any})
               onChange={(e) => setSelectedTopic(e.target.value)}
             >
               <option>Random Subject</option>
-              {topics.map((topic: any, index: number) => {
+              {topics.map((topic: Topic, index: number) => {
                 return (
                   <option key={index} value={topic.slug}>
                     {topic.name}
