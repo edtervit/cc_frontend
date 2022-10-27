@@ -1,8 +1,8 @@
 export interface GeneralMessage {
-  id: number,
-  isOblique: number,
+  id?: number,
+  isOblique?: number,
   message: string,
-  type: string,
+  type?: string,
   fromUrl?:boolean, 
 }
 
@@ -20,6 +20,9 @@ export interface SubjectsData {
   fromUrl?: boolean
   subject: string,
   id?: number
+  isOblique?: number,
+  type?: string,
+  message?: string,
 }
 
 export interface Image {

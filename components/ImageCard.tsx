@@ -16,7 +16,7 @@ function ImageCard({defaultImages, topics}: {defaultImages: Image[], topics: Top
 
   const [imageCounter, setImageCounter] = useState(0);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const [isColourPopoverOpen, setIsColourPopoverOpen] = useState(false)
+  // const [isColourPopoverOpen, setIsColourPopoverOpen] = useState(false)
   const [showLightbox, setShowLightbox] = useState(false)
 
   const [selectedColour, setSelectedColour] = useState<undefined | selectedColourObject>(undefined);

@@ -2,10 +2,12 @@ import React, {useEffect, useState} from "react";
 import ShuffleButton from "./ShuffleButton";
 import {Popover} from 'react-tiny-popover'
 import RewindButton from "./RewindButton";
-import {GeneralMessage} from "../helper/types";
+import {GeneralMessage, SubjectsData} from "../helper/types";
 
 
-function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: GeneralMessage[], title: string, dbColName: string}) {
+function SimpleTextCard({generalMessages, title, dbColName}: {generalMessages: GeneralMessage[] | SubjectsData[], title: string, dbColName: string}) {
+  
+  console.log(generalMessages)
   const [messageCounter, setMessageCounter] = useState(0);
   const [message, setMessage] = useState(
     generalMessages[messageCounter][dbColName as keyof GeneralMessage]
